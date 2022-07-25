@@ -1,0 +1,24 @@
+{
+  "name": "my_first_server",
+  "version": "0.0.1",
+  "description": "my first attempt at building a Node server, and later deploying it to the web.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node node.js"
+  },
+  "keywords": [
+    "Node.js",
+    "newbie"
+  ],
+  "author": "Agent Orange",
+  "license": "ISC",
+  "dependencies": {
+    "ccxt": "^1.81.17",
+    "chalk": "^4.1.2",
+    "clinic": "^11.1.0",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.0",
+    "node-fetch": "^2.6.7"
+  }
+}
