@@ -6,6 +6,7 @@ const { response } = require('express');
 const { param } = require('express/lib/request');
 
 const Bot = require('./bot.js');
+const BotExchangeData = require('./botDataObjectFile.js');
 //ccxt = exchange library that helps connect to and work with various exchanges
 const ccxt = require('ccxt');
 const fs = require('fs');
@@ -19,7 +20,7 @@ const nodeURLs = {
 }
 
 //create local server, listen at port 3001
-const PORT = 3000;
+const PORT = 1337;
 app.listen(PORT, ()=>console.log(`Local server started. Listening at port ${PORT}...`));
 //push forward public folder, index.html is assumed
 app.use(express.static('public'));
@@ -27,14 +28,24 @@ app.use(express.json());
 
 console.log('Running CCXT version: '+ccxt.version);
 
-//console.log(ccxt.exchanges);//lists all available exchanges by id
-const bybit = new ccxt.bybit({
-    'apiKey':process.env.API_KEY0,
-    'secret':process.env.API_SECRET0,
-    'uid':process.env.uid
+//---------------------------------------------------
+//----------------BOT CREATION-----------------------
+//---------------------------------------------------
+const bybitBot11 = new ccxt.bybit({
+    'apiKey':process.env.API_KEY11,
+    'secret':process.env.API_SECRET11,
+    'uid':process.env.uid11
 });
-bybit.setSandboxMode(true);
-console.log('Connection with exchange BYBIT has started.');
+bybitBot11.setSandboxMode(true);
+console.log('Connection with exchange BYBIT bot 11 has started.');
+
+const bybitBot12 = new ccxt.bybit({
+    'apiKey':process.env.API_KEY12,
+    'secret':process.env.API_SECRET12,
+    'uid':process.env.uid12
+});
+bybitBot12.setSandboxMode(true);
+console.log('Connection with exchange BYBIT bot 12 has started.');
 
 //---------------------------------------------------
 //----------------Variables--------------------------
@@ -43,59 +54,23 @@ console.log('Connection with exchange BYBIT has started.');
 //let openOrders = [];
 
 exchange_information = {
-    currentPosition:{
-        currentPrice:'???',
-        quantity:'???',
-        value: '???',
-        entryPrice: '???',
-        tradeType: '???',
-        lastOrderTime: '???',
-        margin:'???',
-        leverage:'???',
-        liquidationPrice:'???',
-        unrealisedPNL:'???',
-        isolated: '???'
-    },
-    pastMonthPNL:[],
-    currentPositionb:{},
-    balance:{
-        wallet_balance : '???',
-        equity:'???',
-        available_balance:'???',
-        used_margin:'???',
-        order_margin:'???',
-        PL:'???',
-        TotalPL:'???',
-        totalTradesCompleted:0
-    },
-    exchange:{
-        openOrders:0,
-        currentPosition:null
-    },
-    botSettings:{
-        commitedCapital:50,//at 40k this is 400USD
-        baseorderpercentage:100,//percentage expressed in decimals
-        baseSizeOrder:0.5,//commitedCapital*baseorderpecentage
-        profitTarget:2,//percentage expressed in decimals
-        leverage:1,
-        safetyTarget:5,//percentage expressed in decimals
-        safetyOrderSizeofCC:10,//percentage expressed in decimals
-        safetyOrderMultiplier:1,//with each safety order, how much do you want to increase the size of every new order?
-        maxSafetyOrdersPlaced:1,//max number of safety orders that can be open orders at any given time
-        maxSafetyOrders:0,
-        leverageSetting:'cross' //can be isolated too
-    }
+    bot1:new BotExchangeData(),
+    bot2:new BotExchangeData(),
+    bot3:new BotExchangeData()
 };
 
-let debugbot = null;
+let bot1 = null;
+let bot2 = null;
 createBot();
 
 async function createBot(){
     //let botArray = [];
     await getCurrentBalance(); // get the balance first
-    debugbot= new Bot('BTCUSD', 'inverse', exchange_information.balance.available_balance, 0.2, 0.02, 20, 0.01, 0.1);
+    bot1= new Bot('BTCUSD', 'inverse', exchange_information.bot1.balance.available_balance, 0.2, 0.02, 20, 0.01, 0.1);
+    bot2= new Bot('BTCUSD', 'inverse', exchange_information.bot2.balance.available_balance, 0.2, 0.02, 20, 0.01, 0.1);
+    //bot3= new Bot('BTCUSD', 'inverse', exchange_information.bot1.balance.available_balance, 0.2, 0.02, 20, 0.01, 0.1);
     getInfo().catch(e=>{console.log(e)});
-    //botArray += debugbot;
+    //botArray += bot1;
 }
 
 
@@ -108,7 +83,7 @@ let timePast = 0;
 const backEndickerRefreshTime = 1000*60*3; // 3 minutes
 
 //at start of the server - get info and start bot(check for active position)
-//getInfo();//move geetInfo to bot creation here above so the getInfo does not crash on a bot that does not yet exist //.then(debugbot.bustAMove(exchange_information, bybit));
+//getInfo();//move geetInfo to bot creation here above so the getInfo does not crash on a bot that does not yet exist //.then(bot1.bustAMove(exchange_information, bybitBot11));
 intervalID = setInterval(getInfoWrapper, backEndickerRefreshTime);//every x-time I want the bot to analyze its position
 
 //---------------------------------------------------
@@ -121,20 +96,33 @@ function getInfoWrapper(){
 }
 async function getInfo(){
     let openOrders = []; // this used to be global but saved all the data of old orders which led to 
-    exchange_information.pastMonthPNL = []; //reset the array so data doesn't keep stacking infinitely
+    exchange_information.bot1.pastMonthPNL = []; //reset the array so data doesn't keep stacking infinitely
     console.log(chalk.green('Node Getting Info - getInfo()'));
 
     //try and get deposit history of past month for BTC
     try{
         const d = new Date();
         d.setMonth(d.getMonth() - 1);
-        const depositsTemp = await bybit.fetchDeposits('BTC', d, 50);
-        depositsTemp.forEach(deposit=>{
+
+        //bot1
+        const depositsTempBot1 = await bybitBot11.fetchDeposits('BTC', d, 50);
+        depositsTempBot1.forEach(deposit=>{
             if(deposit.info.type === 'RealisedPNL'){
                 const tmp = {'date':deposit.info.exec_time.slice(0,10), 'amount':Number(deposit.info.amount).toFixed(8), 'wallet_balance':Number(deposit.info.wallet_balance).toFixed(8), 'gains':Number(Number(deposit.info.amount)/Number(deposit.info.wallet_balance)).toFixed(8)};
                 //console.log(tmp);
                 //console.log('added to the PL array');
-                exchange_information.pastMonthPNL.push(tmp);
+                exchange_information.bot1.pastMonthPNL.push(tmp);
+            }
+        });
+
+        //bot2
+        const depositsTempBot2 = await bybitBot12.fetchDeposits('BTC', d, 50);
+        depositsTempBot2.forEach(deposit=>{
+            if(deposit.info.type === 'RealisedPNL'){
+                const tmp = {'date':deposit.info.exec_time.slice(0,10), 'amount':Number(deposit.info.amount).toFixed(8), 'wallet_balance':Number(deposit.info.wallet_balance).toFixed(8), 'gains':Number(Number(deposit.info.amount)/Number(deposit.info.wallet_balance)).toFixed(8)};
+                //console.log(tmp);
+                //console.log('added to the PL array');
+                exchange_information.bot2.pastMonthPNL.push(tmp);
             }
         });
     }catch(e){
@@ -145,8 +133,12 @@ async function getInfo(){
     //get current pricing data
     try{
         
-        exchange_information.currentPosition.currentPrice = await bybit.fetchTicker(debugbot.pair);//update current price information
-        /* bybit.fetchTicker("BTCUSDT") return format:
+        exchange_information.bot1.currentPosition.currentPrice = await bybitBot11.fetchTicker(bot1.pair);//update current price information
+        //quick n dirty copying of price data
+        exchange_information.bot2.currentPosition.currentPrice = exchange_information.bot1.currentPosition.currentPrice;
+        exchange_information.bot3.currentPosition.currentPrice = exchange_information.bot1.currentPosition.currentPrice;
+
+        /* bybitBot11.fetchTicker("BTCUSDT") return format:
         {
             symbol: 'BTC/USDT:USDT',
             timestamp: 1651572016013,
@@ -197,14 +189,33 @@ async function getInfo(){
                 }
         }*/
 
-        //get the current balance
-        const bTemp = await (await bybit.fetchBalance({"currency":"BTC"})).info.result.BTC;
-        exchange_information.balance.wallet_balance = bTemp.wallet_balance;
-        exchange_information.balance.equity = bTemp.equity;
-        exchange_information.balance.available_balance = bTemp.available_balance;
-        exchange_information.balance.used_margin = bTemp.used_margin;
-        exchange_information.balance.order_margin = bTemp.order_margin;
-        exchange_information.balance.PL = bTemp.realised_pnl;
+        //get the current balance - bot 1
+        const bTemp1 = await (await bybitBot11.fetchBalance({"currency":"BTC"})).info.result.BTC;
+        exchange_information.bot1.balance.wallet_balance = bTemp1.wallet_balance;
+        exchange_information.bot1.balance.equity = bTemp1.equity;
+        exchange_information.bot1.balance.available_balance = bTemp1.available_balance;
+        exchange_information.bot1.balance.used_margin = bTemp1.used_margin;
+        exchange_information.bot1.balance.order_margin = bTemp1.order_margin;
+        exchange_information.bot1.balance.PL = bTemp1.realised_pnl;
+
+        //get the current balance - bot 2
+        const bTemp2 = await (await bybitBot12.fetchBalance({"currency":"BTC"})).info.result.BTC;
+        exchange_information.bot2.balance.wallet_balance = bTemp2.wallet_balance;
+        exchange_information.bot2.balance.equity = bTemp2.equity;
+        exchange_information.bot2.balance.available_balance = bTemp2.available_balance;
+        exchange_information.bot2.balance.used_margin = bTemp2.used_margin;
+        exchange_information.bot2.balance.order_margin = bTemp2.order_margin;
+        exchange_information.bot2.balance.PL = bTemp2.realised_pnl;
+
+        //get the current balance - bot 3
+        /*const bTemp3 = await (await bybitBot11.fetchBalance({"currency":"BTC"})).info.result.BTC;
+        exchange_information.bot3.balance.wallet_balance = bTemp3.wallet_balance;
+        exchange_information.bot3.balance.equity = bTemp3.equity;
+        exchange_information.bot3.balance.available_balance = bTemp3.available_balance;
+        exchange_information.bot3.balance.used_margin = bTemp3.used_margin;
+        exchange_information.bot3.balance.order_margin = bTemp3.order_margin;
+        exchange_information.bot3.balance.PL = bTemp3.realised_pnl;
+        */
         
     }catch(e){
         console.log(chalk.red('Node getInfo() - fetchTicker + fetchBalance encountered an error, exiting the function')+e);
@@ -215,9 +226,9 @@ async function getInfo(){
 
     //get the current open orders
     try{
-        const openOrdersTemp = await bybit.fetchOrders('BTCUSD');
+        const openOrdersTemp = await bybitBot11.fetchOrders('BTCUSD');
         openOrdersTemp.forEach(openOrder=>{
-            //debugbot.logData(`000000000 logging orders from fetch order 000000   ${JSON.stringify(openOrder)} 00000000 ENDENDEND`);
+            //bot1.logData(`000000000 logging orders from fetch order 000000   ${JSON.stringify(openOrder)} 00000000 ENDENDEND`);
             if(openOrder.info.order_status != 'Filled' && openOrder.info.order_status != 'Cancelled'){// check for filled or cancelled orders, don't want to later on try delete orders that no longer exist
                 console.log('Open Order order status = '+openOrder.info.order_status);
                 openOrders.push(openOrder);
@@ -279,28 +290,28 @@ async function getInfo(){
         //Promise.resolve(); 
     }
 
-    //get all positions for all pairs
+    //get all positions for all pairs - bot 1
     try{
-    const existingPositionsTemp = await bybit.fetchPositions(debugbot.pair, {'type':debugbot.type});//returns all positons in inverse perpetuals (or whatever market you ask for) but every pair is empty size and ID = 0 if no positions are open.
-    //existingPositionsTemp? debugbot.logData(`####### this is the position list from getInfo() in node.js ########`) : '';
+    const existingPositionsTemp = await bybitBot11.fetchPositions(bot1.pair, {'type':bot1.type});//returns all positons in inverse perpetuals (or whatever market you ask for) but every pair is empty size and ID = 0 if no positions are open.
+    //existingPositionsTemp? bot1.logData(`####### this is the position list from getInfo() in node.js ########`) : '';
     existingPositionsTemp.forEach(position=>{
         //console.log(chalk.yellow('here is each position I get from fetchPositions()'+JSON.stringify(position)));
-        if(position.data.symbol === debugbot.pair){
-            debugbot.checkLeverageAndType(position, bybit);
+        if(position.data.symbol === bot1.pair){
+            bot1.checkLeverageAndType(position, bybitBot11);
             fillInInformation(position);
             if(position.data.size>0){
-                debugbot.logData(`####### A position was found: qty=${JSON.stringify(position.data.size)} entry_price=${JSON.stringify(position.data.entry_price)} side=${JSON.stringify(position.data.side)} ########`);
+                bot1.logData(`####### A position was found: qty=${JSON.stringify(position.data.size)} entry_price=${JSON.stringify(position.data.entry_price)} side=${JSON.stringify(position.data.side)} ########`);
                 //There is a position found, have bot check what to do with it
                 console.log(chalk.blue('NODE: Position found, size='+position.data.size+'entry_price='+position.data.entry_price+' bot needs to figure out what to do.'));
                 const tempEmptyArr = [];
-                //debugbot.logSafetyOrders(tempEmptyArr, position);
-                debugbot.checkTakeProfit(position, bybit);
-                debugbot.checkSafetyOrders(position, bybit, exchange_information.currentPosition.currentPrice);
-                //debugbot.bustAMove(exchange_information, bybit); - dunno if I'll need this?
+                //bot1.logSafetyOrders(tempEmptyArr, position);
+                bot1.checkTakeProfit(position, bybitBot11);
+                bot1.checkSafetyOrders(position, bybitBot11, exchange_information.bot1.currentPosition.currentPrice);
+                //bot1.bustAMove(exchange_information, bybitBot11); - dunno if I'll need this?
             }else if(position.data.size===0){
                 //There is no position, have bot place base order
-                debugbot.logData('_________________________________________________________');
-                debugbot.logData('NODE: No position found, telling bot to place base order.');
+                bot1.logData('_________________________________________________________');
+                bot1.logData('NODE: No position found, telling bot to place base order.');
                 console.log(chalk.cyan('NODE: getInfo() No position found, telling bot to place base order.'));
                 let i = 0;
                 let ii = 0;
@@ -311,17 +322,17 @@ async function getInfo(){
                         i++;
                         console.log('Node getInfo Deletion Ticker = '+i+' number of orders in array openOrders = '+openOrders.length);
                         console.log(chalk.red('cancelling order from Node getInfo() - no active position, but I found sell orders'));
-                        debugbot.cancelOrder(order.info.order_id, order.info.symbol, bybit);
+                        bot1.cancelOrder(order.info.order_id, order.info.symbol, bybitBot11);
                     }else if(order.info.side === 'Buy' && order.info.cum_exec_qty === '0'){//if there is no position, but an order(s) was found (unfilled) - delete them all before placing new BO
                         ii++;
                         console.log('Node getInfo Deletion Ticker = '+ii+' number of orders in array openOrders = '+openOrders.length);
                         console.log(chalk.red('cancelling order from Node getInfo() - no active position, but I found buy orders'));
-                        debugbot.cancelOrder(order.info.order_id, order.info.symbol, bybit);
-                        debugbot.safetyOrderCount=0;//when deleting all orders because no position, reset SO counter so it can place new ones
+                        bot1.cancelOrder(order.info.order_id, order.info.symbol, bybitBot11);
+                        bot1.safetyOrderCount=0;//when deleting all orders because no position, reset SO counter so it can place new ones
                     }
                 });
 
-                debugbot.placeBaseOrder(bybit);
+                bot1.placeBaseOrder(bybitBot11);
             }
         }else{
             //console.log('set position to FALSE');
@@ -329,11 +340,68 @@ async function getInfo(){
         }
     });
     }catch(e){
-        console.log(chalk.red('Node getInfo() - fetchPositions encountered an error, exiting the function')+e);
+        console.log(chalk.red('Node getInfo() - fetchPositions bot 1 encountered an error, exiting the function')+e);
         return new Promise.reject('getInfo() failed');
         //throw new Error('Node - getInfo() failed.');
         //return Promise.reject(); 
     }
+
+    //get all positions for all pairs - bot 2
+    try{
+        const existingPositionsTemp = await bybitBot12.fetchPositions(bot1.pair, {'type':bot2.type});//returns all positons in inverse perpetuals (or whatever market you ask for) but every pair is empty size and ID = 0 if no positions are open.
+        //existingPositionsTemp? bot1.logData(`####### this is the position list from getInfo() in node.js ########`) : '';
+        existingPositionsTemp.forEach(position=>{
+            //console.log(chalk.yellow('here is each position I get from fetchPositions()'+JSON.stringify(position)));
+            if(position.data.symbol === bot2.pair){
+                bot2.checkLeverageAndType(position, bybitBot12);
+                fillInInformation(position);
+                if(position.data.size>0){
+                    bot2.logData(`####### A position was found: qty=${JSON.stringify(position.data.size)} entry_price=${JSON.stringify(position.data.entry_price)} side=${JSON.stringify(position.data.side)} ########`);
+                    //There is a position found, have bot check what to do with it
+                    console.log(chalk.blue('NODE: Position found, size='+position.data.size+'entry_price='+position.data.entry_price+' bot needs to figure out what to do.'));
+                    const tempEmptyArr = [];
+                    //bot2.logSafetyOrders(tempEmptyArr, position);
+                    bot2.checkTakeProfit(position, bybitBot12);
+                    bot2.checkSafetyOrders(position, bybitBot12, exchange_information.bot1.currentPosition.currentPrice);
+                    //bot2.bustAMove(exchange_information, bybitBot11); - dunno if I'll need this?
+                }else if(position.data.size===0){
+                    //There is no position, have bot place base order
+                    bot2.logData('_________________________________________________________');
+                    bot2.logData('NODE: No position found, telling bot to place base order.');
+                    console.log(chalk.cyan('NODE: getInfo() No position found, telling bot to place base order.'));
+                    let i = 0;
+                    let ii = 0;
+                    openOrders.forEach(order=>{
+                        console.log('Node - getInfo() - checking open order:');
+                        //console.log(order);
+                        if(order.info.side === 'Sell' && order.info.leaves_qty > 0){//when no position is active, delete any TP orders still in order book, do this before new orders are placed
+                            i++;
+                            console.log('Node getInfo Deletion Ticker = '+i+' number of orders in array openOrders = '+openOrders.length);
+                            console.log(chalk.red('cancelling order from Node getInfo() - no active position, but I found sell orders'));
+                            bot2.cancelOrder(order.info.order_id, order.info.symbol, bybitBot12);
+                        }else if(order.info.side === 'Buy' && order.info.cum_exec_qty === '0'){//if there is no position, but an order(s) was found (unfilled) - delete them all before placing new BO
+                            ii++;
+                            console.log('Node getInfo Deletion Ticker = '+ii+' number of orders in array openOrders = '+openOrders.length);
+                            console.log(chalk.red('cancelling order from Node getInfo() - no active position, but I found buy orders'));
+                            bot2.cancelOrder(order.info.order_id, order.info.symbol, bybitBot12);
+                            bot2.safetyOrderCount=0;//when deleting all orders because no position, reset SO counter so it can place new ones
+                        }
+                    });
+    
+                    bot2.placeBaseOrder(bybitBot12);
+                }
+            }else{
+                //console.log('set position to FALSE');
+                //exchange_information.exchange.currentPosition = false;
+            }
+        });
+        }catch(e){
+            console.log(chalk.red('Node getInfo() - fetchPositions bot 2 encountered an error, exiting the function')+e);
+            return new Promise.reject('getInfo() failed');
+            //throw new Error('Node - getInfo() failed.');
+            //return Promise.reject(); 
+        }
+
     return Promise.resolve();
     /*return format of fetchPositions
     {
@@ -379,31 +447,31 @@ is_valid: true
     //response.end();
 }
 function fillInInformation(info){
-    exchange_information.currentPosition.quantity = info.data.size;
-    exchange_information.currentPosition.value = info.data.position_value;
-    exchange_information.currentPosition.entryPrice = info.data.entry_price;
-    exchange_information.currentPosition.leverage = info.data.leverage;
-    exchange_information.currentPosition.liquidationPrice = info.data.liq_price;
-    exchange_information.currentPosition.unrealisedPNL = info.data.unrealised_pnl;
-    exchange_information.currentPosition.margin = info.data.position_margin;
-    exchange_information.currentPosition.lastOrderTime = info.data.created_at;
-    exchange_information.currentPosition.tradeType = info.data.side;
-    exchange_information.currentPosition.isolated = info.data.is_isolated;
+    exchange_information.bot1.currentPosition.quantity = info.data.size;
+    exchange_information.bot1.currentPosition.value = info.data.position_value;
+    exchange_information.bot1.currentPosition.entryPrice = info.data.entry_price;
+    exchange_information.bot1.currentPosition.leverage = info.data.leverage;
+    exchange_information.bot1.currentPosition.liquidationPrice = info.data.liq_price;
+    exchange_information.bot1.currentPosition.unrealisedPNL = info.data.unrealised_pnl;
+    exchange_information.bot1.currentPosition.margin = info.data.position_margin;
+    exchange_information.bot1.currentPosition.lastOrderTime = info.data.created_at;
+    exchange_information.bot1.currentPosition.tradeType = info.data.side;
+    exchange_information.bot1.currentPosition.isolated = info.data.is_isolated;
 
-    exchange_information.balance.order_margin = info.data.order_margin;
-    exchange_information.balance.available_balance = info.data.wallet_balance;
+    exchange_information.bot1.balance.order_margin = info.data.order_margin;
+    exchange_information.bot1.balance.available_balance = info.data.wallet_balance;
 }
 
  async function getNewBTCprice(res){
     try{
-        return await bybit.fetchTicker(debugbot.pair).catch(e=>console.log(e));
+        return await bybitBot11.fetchTicker(bot1.pair).catch(e=>console.log(e));
     }catch(e){
         console.log(chalk.red('Node getNewBTCprice() - fetchTicker encountered an error, exiting the function')+e);
         //throw new Error('Node - getNewBTCprice() failed.');
         //res.end();
         return Promise.reject('Node getNewBTCprice() failed ');
     }
-    /* bybit.fetchTicker("BTCUSDT") return format:
+    /* bybitBot11.fetchTicker("BTCUSDT") return format:
     {
         symbol: 'BTC/USDT:USDT',
         timestamp: 1651572016013,
@@ -457,13 +525,30 @@ function fillInInformation(info){
 
 async function getCurrentBalance(){
     try{
-        const bTemp = await (await bybit.fetchBalance({"currency":"BTC"})).info.result.BTC;
-        exchange_information.balance.equity = bTemp.equity;
-        exchange_information.balance.available_balance = bTemp.available_balance;
-        exchange_information.balance.used_margin = bTemp.used_margin;
-        exchange_information.balance.order_margin = bTemp.order_margin;
-        exchange_information.balance.TotalPL = bTemp.cum_realised_pnl;
-        exchange_information.balance.PL = bTemp.realised_pnl;
+        const bTemp1 = await (await bybitBot11.fetchBalance({"currency":"BTC"})).info.result.BTC;
+        exchange_information.bot1.balance.equity = bTemp1.equity;
+        exchange_information.bot1.balance.available_balance = bTemp1.available_balance;
+        exchange_information.bot1.balance.used_margin = bTemp1.used_margin;
+        exchange_information.bot1.balance.order_margin = bTemp1.order_margin;
+        exchange_information.bot1.balance.TotalPL = bTemp1.cum_realised_pnl;
+        exchange_information.bot1.balance.PL = bTemp1.realised_pnl;
+
+        const bTemp2 = await (await bybitBot12.fetchBalance({"currency":"BTC"})).info.result.BTC;
+        exchange_information.bot2.balance.equity = bTemp2.equity;
+        exchange_information.bot2.balance.available_balance = bTemp2.available_balance;
+        exchange_information.bot2.balance.used_margin = bTemp2.used_margin;
+        exchange_information.bot2.balance.order_margin = bTemp2.order_margin;
+        exchange_information.bot2.balance.TotalPL = bTemp2.cum_realised_pnl;
+        exchange_information.bot2.balance.PL = bTemp2.realised_pnl;
+
+        /*const bTemp3 = await (await bybitBot13.fetchBalance({"currency":"BTC"})).info.result.BTC;
+        exchange_information.bot3.balance.equity = bTemp3.equity;
+        exchange_information.bot3.balance.available_balance = bTemp3.available_balance;
+        exchange_information.bot3.balance.used_margin = bTemp3.used_margin;
+        exchange_information.bot3.balance.order_margin = bTemp3.order_margin;
+        exchange_information.bot3.balance.TotalPL = bTemp3.cum_realised_pnl;
+        exchange_information.bot3.balance.PL = bTemp3.realised_pnl;
+        */
     }catch(e){
         console.log(chalk.red('Node getCurrentBalance() - fetchBalance encountered an error, exiting the function')+e);
         //throw new Error('Node - getCurrentBalance() failed.');
@@ -474,7 +559,7 @@ async function getCurrentBalance(){
 async function getCurrentPosition(){
     //console.log(chalk.green('getCurrentPosition()'));
     try{
-        const pTemp = await bybit.fetchPositions(debugbot.pair, {'type':debugbot.type});
+        const pTempbot1 = await bybitBot11.fetchPositions(bot1.pair, {'type':bot1.type});
         /*
                 {
                 data: {
@@ -517,17 +602,24 @@ async function getCurrentPosition(){
                 is_valid: true
                 }
                 */
-        pTemp.forEach( p=>{
-            if(p.data.symbol === debugbot.pair){
-                //console.log(p);
-                exchange_information.currentPositionb = p;
+            pTempbot1.forEach( p=>{
+                if(p.data.symbol === bot1.pair){
+                    //console.log(p);
+                    exchange_information.bot1.currentPositionb = p;
+                    //update bot data if settings were changed behind its back
+                    //bot1.leverage = p.data.leverage;
+                }
+            });
+       
+        const pTempbot2 = await bybitBot12.fetchPositions(bot2.pair, {'type':bot2.type});
+        pTempbot2.forEach( p=>{
+            if(p.data.symbol === bot2.pair){
+                exchange_information.bot2.currentPositionb = p;
                 //update bot data if settings were changed behind its back
-                //debugbot.leverage = p.data.leverage;
+                //bot1.leverage = p.data.leverage;
             }
         });
-       // console.log(pTemp);
 
-       // return Promise.resolve();
     }catch(e){
         console.log(chalk.red('Node getCurrentPosition() - fetchPositions encountered an error, exiting the function ')+e);
         //throw new Error('Node - getCurrentPosition() failed.');
@@ -578,7 +670,7 @@ app.get(`${nodeURLs.baseURL+nodeURLs.updateRequest}`, (request, response) =>{
 
 app.get(`${nodeURLs.baseURL+nodeURLs.botSettings}`, (request, response) =>{
     console.log(chalk.blue('SERVER: I have seen your request for the bot settings.'));
-    const a = exchange_information.botSettings;
+    const a = exchange_information.bot1.botSettings;
     console.log(a);
     return response.json(a);
 })
@@ -647,8 +739,8 @@ app.post(`${nodeURLs.baseURL+nodeURLs.changeBotSettings}`, (request, response)=>
     }else if(request.body.data.includes('debug')){
         console.log('SERVER: debugdebugdebugdebugdebugdebugdebugdebugdebugdebugdebugdebug');
         
-        debugbot.debug(request,response, exchange_information, bybit);
-        //bybit.createMarketOrder('BTCUSD', 'buy', bos);//test for bot info
+        bot1.debug(request,response, exchange_information, bybitBot11);
+        //bybitBot11.createMarketOrder('BTCUSD', 'buy', bos);//test for bot info
         //do a function, give it the response, and exit with the response via that function
 
     }else{
@@ -661,7 +753,11 @@ app.post(`${nodeURLs.baseURL+nodeURLs.changeBotSettings}`, (request, response)=>
 async function generateUpdate(res){
     //console.log(chalk.green('generateUpdate()'));
     try{
-        exchange_information.currentPosition.currentPrice = await getNewBTCprice(res).catch(e=>console.log(e));
+        exchange_information.bot1.currentPosition.currentPrice = await getNewBTCprice(res).catch(e=>console.log(e));
+        //quick dirty copy of price info to other bots
+        exchange_information.bot2.currentPosition.currentPrice = exchange_information.bot1.currentPosition.currentPrice;
+        exchange_information.bot3.currentPosition.currentPrice = exchange_information.bot1.currentPosition.currentPrice;
+
         await getCurrentBalance().catch(e=>console.log(e));
        //return Promise.resolve();
     }catch(e){
@@ -692,7 +788,7 @@ function updateTimeAndTicks(){
     const formattedTimePast = days + ' day(s) '+ h + ":" + m.substring(m.length-2) + ":" + s.substring(s.length -2);
 
     console.log(chalk.gray(now.toUTCString() +' uptime: '+formattedTimePast+" - Ticks: "+ticks));
-    debugbot.logData(`---------- uptime: '${formattedTimePast} - Ticks: "${ticks} ----------`);
+    bot1.logData(`---------- uptime: '${formattedTimePast} - Ticks: "${ticks} ----------`);
 }
 
 function initiateBotServerSide(req, res){
@@ -705,18 +801,18 @@ function initiateBotServerSide(req, res){
     //res.json(sendOff);
 }
 function updateBotSettingsServerSide(settings){
-    debugbot.changeSettings(settings, bybit);
+    bot1.changeSettings(settings, bybitBot11);
     //console.log('these are the bot settings');
     //console.log(settings);
 
     //enter those settings into a local object, ... perhaps the bot should have this object and just pass it? or is that unsafe?
-    exchange_information.botSettings.commitedCapital = settings.committed_capital/100;
-    exchange_information.botSettings.baseorderpercentage = settings.base_order_percentage/100;
-    exchange_information.botSettings.baseSizeOrder = settings.base_order_percentage*settings.commited_capital;
-    exchange_information.botSettings.profitTarget = settings.profit_target/100;
-    exchange_information.botSettings.leverage = settings.leverage;
-    exchange_information.botSettings.safetyTarget = settings.safety_target/100;
-    exchange_information.botSettings.safetyOrderSizeofCC = settings.safety_order_percentage/100;
+    exchange_information.bot1.botSettings.commitedCapital = settings.committed_capital/100;
+    exchange_information.bot1.botSettings.baseorderpercentage = settings.base_order_percentage/100;
+    exchange_information.bot1.botSettings.baseSizeOrder = settings.base_order_percentage*settings.commited_capital;
+    exchange_information.bot1.botSettings.profitTarget = settings.profit_target/100;
+    exchange_information.bot1.botSettings.leverage = settings.leverage;
+    exchange_information.bot1.botSettings.safetyTarget = settings.safety_target/100;
+    exchange_information.bot1.botSettings.safetyOrderSizeofCC = settings.safety_order_percentage/100;
     //console.log(chalk.blue('SERVER: changing bot settings succesful'));
 
     //const sendOff = exchange_information;//create copy of the object and send that off, security reasons? am too newbie

@@ -9,33 +9,15 @@
     <title>Santa Stacks Sats 0.1.0 Alpha</title>
 </head>
 <body>
-    <div class="header">
+    <!--<div class="header">
         <a href="#default" class="headerTitle">SANTA STACKS SATS</a>
-        <div class="header-right">
-          <a class="active" href="#default">Home</a>
-          <a href="#default">Contact</a>
-          <a href="#default">About</a>
-        </div>
-    </div> 
-    <!-- <div>
-        <label for="membership">Refresh BTC price every:</label>
-            <select name="timeInterval" id="timeIntervalSelector">
-            <option value="10000">10 seconds</option>
-            <option value="30000">30 seconds</option>
-            <option value="60000" selected>1 minute</option>
-            <option value="180000">3 minutes</option>
-            </select>
-    </div>
-    <div>
-        <button id="requestPrice" type="submit">Show me the latest price</button>
-        
-    </div>
-    <div>
-        <button id="get-current-position" type="submit">Get the Elf's current position</button>
-    </div>-->
+    </div> -->
 
-    <!-- Current Price Display -->
-    <!-- Black Price Container -->
+
+    <!-- BOT1 - BOT1 - BOT1 -->
+    <!-- BOT1 - BOT1 - BOT1 -->
+    <!-- BOT1 - BOT1 - BOT1 -->
+    <!-- BOT1 - BOT1 - BOT1 -->
     <div class="totaldiv">
         <!--debug panel-->
        <!-- <div class="botdiv">
@@ -55,22 +37,209 @@
             <div class=" rectangleBlack childoftotal">
                 <div class="PriceDisplayContainer">
                     <div class="connectionStatusDiv">
-                        <canvas id="connectionCircle" width="10" height="10" class="connectionMarkers"></canvas>
-                        <p id="connectionStatus" class="connectionMarkers">Connection is unclear</p>
+                        <canvas id="connectionCircle1" width="10" height="10" class="connectionMarkers"></canvas>
+                        <p id="connectionStatus1" class="connectionMarkers">Connection is unclear</p>
                     </div>
-                    <p id="cardTitle">ByBit</p>
+                    <p id="cardTitle">ByBit Elf 11</p>
                     
                     <div class = "platformSymbolData">
                         
-                        <p class=""><span id="symbolDisplay">symbol</span></p>
+                        <p class=""><span id="symbolDisplay1">symbol</span></p>
                         <p class="PriceDisplayText">Last</p>
-                        <p id="lastPriceDisplay" class="PriceDisplayTextSuper">no price requested yet</p>
-                        <p class="PriceDisplayText">24h change: <span id="dailyChange"></span></p>
-                        <p class="PriceDisplayText">Ask: <span id="askPriceDisplay"></span></p>
-                        <p class="PriceDisplayText">Bid: <span id="bidPriceDisplay"></span></p>
+                        <p id="lastPriceDisplay1" class="PriceDisplayTextSuper">no price requested yet</p>
+                        <p class="PriceDisplayText">24h change: <span id="dailyChange1"></span></p>
+                        <p class="PriceDisplayText">Ask: <span id="askPriceDisplay1"></span></p>
+                        <p class="PriceDisplayText">Bid: <span id="bidPriceDisplay1"></span></p>
                     </div>
                     <div class="elfGifDiv">
-                        <img src="elfJumpingClear.gif" width="240" height="155" frameBorder="0" class="childoftotal" alt="elf jumping gif" id="jumpingElfGif"></img>
+                        <img src="elfJumpingClear.gif" width="240" height="155" frameBorder="0" class="childoftotal" alt="elf jumping gif" id="jumpingElfGif1"></img>
+                    </div>
+                </div>
+                
+            </div>
+
+        <!-- <div class="PriceDisplayContainer">
+                <p class="PriceDisplayTitle">CURRENT BTC PRICE</p>
+                <p id="askPriceDisplay">no price requested yet</p>
+                <p id="bidPriceDisplay">no price requested yet</p>
+                <p id="lastPriceDisplay">no price requested yet</p>
+            </div>-->
+            
+            <!-- Orange Container -->
+            <!-- Overall Performance Container -->
+            <div class=" rectangleOrange childoftotal">
+                <div class="orangeContainerTop">
+                    <p id="cardTitle">Elf PERFORMANCE</p>
+                    <p class="subTitle">Today's Gainz</p>
+        
+                    <p id="UPLUSD1" class="PositionDisplayTextSuper">0.00000000</p>
+                    <p id="UPLpercentage1" class="PositionDisplayText">+0%</p>
+                    <p id="UPL1" class="PositionDisplayText">0.00000000</p>
+                    <p>. </p>
+                    <p class="subTitle">Total Gainz</p>
+                    <p id="TotalPLUSD1" class="PositionDisplayTextSuper">0.00000000</p>
+                    <p id="TotalPL1" class="PositionDisplayText">0.00000000</p>
+                    
+                </div>
+                <div><button class="subTitle nonButton" id="PerfTitle1">Performance</button><span id="PerfArrow1" class="PerfArrowDown"></span></div>
+                <div class="orangeContainerBottom flex-container" id="PerformanceStatsDiv1">
+                    <div class="flex-child" id="perfLeft">
+                        <ul id="avg-gains-left" class="ulstats">
+                            <li id="Return-7PL" class="statsli">Past 7 days PL:</li>
+                            <li id="Return-7avggain" class="statsli">Past 7 avg % ROC/day:</li>
+                            <li id="Return-30PL" class="statsli">Past 30 days PL:</li>
+                            <li id="Return-30avggain" class="statsli">Past 30 avg % ROC/day:</li>
+                            <li id="Return-30avggain" class="statsli">Annualized % ROC:</li>
+                        </ul>
+                        
+                    </div>
+                    <div class="flex-child" id="perfRight">
+                        <ul id="avg-gains-right">
+                            <li id="number-7PL1" class="statsli">???</li>
+                            <li id="number-7avggain1" class="statsli">???</li>
+                            <li id="number-30PL1" class="statsli">???</li>
+                            <li id="number-30avggain1" class="statsli">???</li>
+                            <li id="number-annualizedReturn1" class="statsli">???</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Current Position Container -->
+                <div><button class="subTitle nonButton" id="cpTitle1">Current Position</button><span id="cpArrow1" class="cpArrowDown"></span></div>
+                <div class="orangeContainerBottom flex-container">
+                    <div class="flex-child" id="cpLeft1">
+                        <ul id="current-position" class="ulstats">
+                            <li id="CP-quantity1" class="statsli">null</li>
+                            <li id="CP-leverage1" class="statsli">null</li>
+                            <li id="CP-isIsolated1" class="statsli">null</li>
+                            <li id="CP-value1" class="statsli">null</li>
+                        </ul>
+                        
+                    </div>
+                    <div class="flex-child" id="cpRight1">
+                        <ul id="current-position">
+                            <li id="CP-entryPrice1" class="statsli">null</li>
+                            <li id="CP-tradeType1" class="statsli">null</li>
+                            <li id="CP-lastOrderTime1" class="statsli">null</li>
+                            <li id="CP-margin1" class="statsli">null</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Balance Container -->
+                <div><button class="subTitle nonButton" id="acBalanceTitle1">Account Balance</button><span id="acBalanceArrow" class="acBalanceArrowDown"></span></div>
+                <div class="orangeContainerBottom flex-container">
+                    <div id ="acBalanceDiv1" class="flex-child">
+                        <ul id="current-position">
+                            <li id="BL-walletBalance1" class="statsli">null</li>
+                            <li id="BL-walletBalanceUSD1" class="statsli">null</li>
+                            <li id="BL-equity1" class="statsli">null</li>
+                            <li id="BL-available1" class="statsli">null</li>
+                            <li id="BL-usedMargin1" class="statsli">null</li>
+                            <li id="BL-orderMargin1" class="statsli">null</li>
+                        </ul>
+                    </div>
+                </div>
+                 <!-- Bot Settings Container -->
+                 <div><button class="subTitle nonButton" id="bsTitle1">Bot Settings</button><span id="bsArrow1" class="bsArrowUp"></span></div>
+                 <div class="orangeContainerBottom flex-container">
+                     <div id ="bsDiv1" class="flex-child HideThis">
+                            <form id="botSettingsform1">
+                                <ul>
+                                    <li><p>
+                                        Committed Capital <br><span style ='font-size:12px'>(% of total account balance)</span>
+                                        <input type="range" min="1" max="100" value="100" class="baseOrderPercent" id="BS-committedCapitalSlider1">
+                                        <span id="BS-committedCapitalNumber1">100</span>
+                                    </li>
+                                    <li>
+                                        <span>Base order size %</span>
+                                        <input type="range" min="1" max="100" value="50" class="baseOrderPercent" id="BS-baseOrderPercentSlider1">
+                                        <span id="BS-baseOrderNumber1">100</span>
+                                    </li>
+                                        <li><p>
+                                            Profit Target %
+                                        <input type ="number" name="profitTarget" id="BS-profitTarget1"></p></li>
+                                        <li><p>
+                                            Leverage
+                                            <input type ="number" name="leverage" id="BS-leverage1"></p></li>
+                                        <li><p>
+                                            Safety Target %
+                                            <input type ="number" name="safetyTarget" id="BS-safetyTarget1"></p></li>
+                                        <li><p>
+                                        <li>
+                                            <span>Safety order size % of CC</span>
+                                            <input type="range" min="1" max="100" value="10" class="safetyOrderPercent" id="BS-safetyOrderPercent1">
+                                            <span id="BS-safetyOrderNumber1">0</span>
+                                        </li>
+                                        <li>
+                                            <span>Maximum number of safety orders</span>
+                                            <span id="BS-maxSafetyOrderNumber1">0</span>
+                                        </li>
+                                        <li><p>
+                                            Liquidation Limit
+                                            <input type ="number" name="liquidationLimit" id="BS-LiquidationLimit1"></p>10000</li>
+                                        
+                                </ul>
+                                <div class="bttnHolder">
+                                    <input type="submit" Value="Update Bot Settings">
+                                </div>
+                            </form>
+                     </div>
+                 </div>
+            </div>
+            <!-- End of Orange Container -->
+    </div>
+    <!--create a new bot div-->
+    <div class="botdiv HideThis">
+        <div class="createabotdiv">
+            <img src="CreateABot.jpg" width="150" id="createABotImageBttn" alt="create a bot" class="createbotimg"></img>
+         </div>
+        <!--end of create a new bot div-->
+    </div>
+<!--end of BOT1 - BOT1 -->
+<!--end of BOT1 - BOT1 -->
+<!--end of BOT1 - BOT1 -->
+<!--end of BOT1 - BOT1 -->
+
+
+<!-- BOT2 - BOT2 - BOT2 -->
+<!-- BOT2 - BOT2 - BOT2 -->
+<!-- BOT2 - BOT2 - BOT2 -->
+<!-- BOT2 - BOT2 - BOT2 -->
+
+    <!--debug panel-->
+       <!-- <div class="botdiv">
+            <ul>
+                <li>DEBUG PANEL</li>
+                <li><button id="createbotbttn">create bot</button></li>
+                <li><button id="baseorderbttn">place baseorder</button></li>
+                <li><button id="safetyorderbttn">place safety order</button></li>
+                <li><button id="leverage10bttn">set leverage to 10</button></li>
+                <li><button id="closepositionbttn">close position</button></li>
+            </ul>
+        </div>-->
+        <!--end of debug panel-->
+        
+        <div class="botdiv">
+            
+            <div class=" rectangleBlack childoftotal">
+                <div class="PriceDisplayContainer">
+                    <div class="connectionStatusDiv">
+                        <canvas id="connectionCircle2" width="10" height="10" class="connectionMarkers"></canvas>
+                        <p id="connectionStatus2" class="connectionMarkers">Connection is unclear</p>
+                    </div>
+                    <p id="cardTitle">ByBit Elf 12</p>
+                    
+                    <div class = "platformSymbolData">
+                        
+                        <p class=""><span id="symbolDisplay2">symbol</span></p>
+                        <p class="PriceDisplayText">Last</p>
+                        <p id="lastPriceDisplay2" class="PriceDisplayTextSuper">no price requested yet</p>
+                        <p class="PriceDisplayText">24h change: <span id="dailyChange2"></span></p>
+                        <p class="PriceDisplayText">Ask: <span id="askPriceDisplay2"></span></p>
+                        <p class="PriceDisplayText">Bid: <span id="bidPriceDisplay2"></span></p>
+                    </div>
+                    <div class="elfGifDiv">
+                        <img src="elfJumpingClear.gif" width="240" height="155" frameBorder="0" class="childoftotal" alt="elf jumping gif" id="jumpingElfGif2"></img>
                     </div>
                 </div>
                 
@@ -93,17 +262,17 @@
                     <p id="cardTitle">Elf PERFORMANCE</p>
                     <p class="subTitle">Today's Gainz</p>
         
-                    <p id="UPLUSD" class="PositionDisplayTextSuper">0.00000000</p>
-                    <p id="UPLpercentage" class="PositionDisplayText">+0%</p>
-                    <p id="UPL" class="PositionDisplayText">0.00000000</p>
+                    <p id="UPLUSD2" class="PositionDisplayTextSuper">0.00000000</p>
+                    <p id="UPLpercentage2" class="PositionDisplayText">+0%</p>
+                    <p id="UPL2" class="PositionDisplayText">0.00000000</p>
                     <p>. </p>
                     <p class="subTitle">Total Gainz</p>
-                    <p id="TotalPLUSD" class="PositionDisplayTextSuper">0.00000000</p>
-                    <p id="TotalPL" class="PositionDisplayText">0.00000000</p>
+                    <p id="TotalPLUSD2" class="PositionDisplayTextSuper">0.00000000</p>
+                    <p id="TotalPL2" class="PositionDisplayText">0.00000000</p>
                     
                 </div>
-                <div><button class="subTitle nonButton" id="PerfTitle">Performance</button><span id="PerfArrow" class="PerfArrowDown"></span></div>
-                <div class="orangeContainerBottom flex-container" id="PerformanceStatsDiv">
+                <div><button class="subTitle nonButton" id="PerfTitle2">Performance</button><span id="PerfArrow2" class="PerfArrowDown"></span></div>
+                <div class="orangeContainerBottom flex-container" id="PerformanceStatsDiv2">
                     <div class="flex-child" id="perfLeft">
                         <ul id="avg-gains-left" class="ulstats">
                             <li id="Return-7PL" class="statsli">Past 7 days PL:</li>
@@ -116,88 +285,88 @@
                     </div>
                     <div class="flex-child" id="perfRight">
                         <ul id="avg-gains-right">
-                            <li id="number-7PL" class="statsli">???</li>
-                            <li id="number-7avggain" class="statsli">???</li>
-                            <li id="number-30PL" class="statsli">???</li>
-                            <li id="number-30avggain" class="statsli">???</li>
-                            <li id="number-annualizedReturn" class="statsli">???</li>
+                            <li id="number-7PL2" class="statsli">???</li>
+                            <li id="number-7avggain2" class="statsli">???</li>
+                            <li id="number-30PL2" class="statsli">???</li>
+                            <li id="number-30avggain2" class="statsli">???</li>
+                            <li id="number-annualizedReturn2" class="statsli">???</li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- Current Position Container -->
-                <div><button class="subTitle nonButton" id="cpTitle">Current Position</button><span id="cpArrow" class="cpArrowDown"></span></div>
+                <div><button class="subTitle nonButton" id="cpTitle2">Current Position</button><span id="cpArrow2" class="cpArrowDown"></span></div>
                 <div class="orangeContainerBottom flex-container">
-                    <div class="flex-child" id="cpLeft">
+                    <div class="flex-child" id="cpLeft2">
                         <ul id="current-position" class="ulstats">
-                            <li id="CP-quantity" class="statsli">null</li>
-                            <li id="CP-leverage" class="statsli">null</li>
-                            <li id="CP-isIsolated" class="statsli">null</li>
-                            <li id="CP-value" class="statsli">null</li>
+                            <li id="CP-quantity2" class="statsli">null</li>
+                            <li id="CP-leverage2" class="statsli">null</li>
+                            <li id="CP-isIsolated2" class="statsli">null</li>
+                            <li id="CP-value2" class="statsli">null</li>
                         </ul>
                         
                     </div>
-                    <div class="flex-child" id="cpRight">
+                    <div class="flex-child" id="cpRight2">
                         <ul id="current-position">
-                            <li id="CP-entryPrice" class="statsli">null</li>
-                            <li id="CP-tradeType" class="statsli">null</li>
-                            <li id="CP-lastOrderTime" class="statsli">null</li>
-                            <li id="CP-margin" class="statsli">null</li>
+                            <li id="CP-entryPrice2" class="statsli">null</li>
+                            <li id="CP-tradeType2" class="statsli">null</li>
+                            <li id="CP-lastOrderTime2" class="statsli">null</li>
+                            <li id="CP-margin2" class="statsli">null</li>
                         </ul>
                     </div>
                 </div>
                 <!-- Balance Container -->
-                <div><button class="subTitle nonButton" id="acBalanceTitle">Account Balance</button><span id="acBalanceArrow" class="acBalanceArrowDown"></span></div>
+                <div><button class="subTitle nonButton" id="acBalanceTitle2">Account Balance</button><span id="acBalanceArrow" class="acBalanceArrowDown"></span></div>
                 <div class="orangeContainerBottom flex-container">
-                    <div id ="acBalanceDiv" class="flex-child">
+                    <div id ="acBalanceDiv2" class="flex-child">
                         <ul id="current-position">
-                            <li id="BL-walletBalance" class="statsli">null</li>
-                            <li id="BL-walletBalanceUSD" class="statsli">null</li>
-                            <li id="BL-equity" class="statsli">null</li>
-                            <li id="BL-available" class="statsli">null</li>
-                            <li id="BL-usedMargin" class="statsli">null</li>
-                            <li id="BL-orderMargin" class="statsli">null</li>
+                            <li id="BL-walletBalance2" class="statsli">null</li>
+                            <li id="BL-walletBalanceUSD2" class="statsli">null</li>
+                            <li id="BL-equity2" class="statsli">null</li>
+                            <li id="BL-available2" class="statsli">null</li>
+                            <li id="BL-usedMargin2" class="statsli">null</li>
+                            <li id="BL-orderMargin2" class="statsli">null</li>
                         </ul>
                     </div>
                 </div>
                  <!-- Bot Settings Container -->
-                 <div><button class="subTitle nonButton" id="bsTitle">Bot Settings</button><span id="bsArrow" class="bsArrowUp"></span></div>
+                 <div><button class="subTitle nonButton" id="bsTitle2">Bot Settings</button><span id="bsArrow2" class="bsArrowUp"></span></div>
                  <div class="orangeContainerBottom flex-container">
-                     <div id ="bsDiv" class="flex-child HideThis">
-                            <form id="botSettingsform">
+                     <div id ="bsDiv2" class="flex-child HideThis">
+                            <form id="botSettingsform2">
                                 <ul>
                                     <li><p>
                                         Committed Capital <br><span style ='font-size:12px'>(% of total account balance)</span>
-                                        <input type="range" min="1" max="100" value="100" class="baseOrderPercent" id="BS-committedCapitalSlider">
-                                        <span id="BS-committedCapitalNumber">100</span>
+                                        <input type="range" min="1" max="100" value="100" class="baseOrderPercent" id="BS-committedCapitalSlider2">
+                                        <span id="BS-committedCapitalNumber2">100</span>
                                     </li>
                                     <li>
                                         <span>Base order size %</span>
-                                        <input type="range" min="1" max="100" value="50" class="baseOrderPercent" id="BS-baseOrderPercentSlider">
-                                        <span id="BS-baseOrderNumber">100</span>
+                                        <input type="range" min="1" max="100" value="50" class="baseOrderPercent" id="BS-baseOrderPercentSlider2">
+                                        <span id="BS-baseOrderNumber2">100</span>
                                     </li>
                                         <li><p>
                                             Profit Target %
-                                        <input type ="number" name="profitTarget" id="BS-profitTarget"></p></li>
+                                        <input type ="number" name="profitTarget" id="BS-profitTarget2"></p></li>
                                         <li><p>
                                             Leverage
-                                            <input type ="number" name="leverage" id="BS-leverage"></p></li>
+                                            <input type ="number" name="leverage" id="BS-leverage2"></p></li>
                                         <li><p>
                                             Safety Target %
-                                            <input type ="number" name="safetyTarget" id="BS-safetyTarget"></p></li>
+                                            <input type ="number" name="safetyTarget" id="BS-safetyTarget2"></p></li>
                                         <li><p>
                                         <li>
                                             <span>Safety order size % of CC</span>
-                                            <input type="range" min="1" max="100" value="10" class="safetyOrderPercent" id="BS-safetyOrderPercent">
-                                            <span id="BS-safetyOrderNumber">0</span>
+                                            <input type="range" min="1" max="100" value="10" class="safetyOrderPercent" id="BS-safetyOrderPercent2">
+                                            <span id="BS-safetyOrderNumber2">0</span>
                                         </li>
                                         <li>
                                             <span>Maximum number of safety orders</span>
-                                            <span id="BS-maxSafetyOrderNumber">0</span>
+                                            <span id="BS-maxSafetyOrderNumber2">0</span>
                                         </li>
                                         <li><p>
                                             Liquidation Limit
-                                            <input type ="number" name="liquidationLimit" id="BS-LiquidationLimit"></p>10000</li>
+                                            <input type ="number" name="liquidationLimit" id="BS-LiquidationLimit2"></p>10000</li>
                                         
                                 </ul>
                                 <div class="bttnHolder">
@@ -216,18 +385,205 @@
          </div>
         <!--end of create a new bot div-->
     </div>
-<!--end of total-->
-</div>
-<!--footer-->
-<div class="footer">
-    <a href="#default" class="footerTitle">SANTA STACKS SATS</a>
-    <div class="footer-right">
-      <a class="active" href="#default">Home</a>
-      <a href="#default">Contact</a>
-      <a href="#default">About</a>
+<!--end of BOT2 - BOT2 - BOT2 -->
+<!--end of BOT2 - BOT2 - BOT2 -->
+<!--end of BOT2 - BOT2 - BOT2 -->
+<!--end of BOT2 - BOT2 - BOT2 -->
+
+
+<!-- BOT3 - BOT3 - BOT3 -->
+<!-- BOT3 - BOT3 - BOT3 -->
+<!-- BOT3 - BOT3 - BOT3 -->
+<!-- BOT3 - BOT3 - BOT3 -->
+
+<!--debug panel-->
+       <!-- <div class="botdiv">
+            <ul>
+                <li>DEBUG PANEL</li>
+                <li><button id="createbotbttn">create bot</button></li>
+                <li><button id="baseorderbttn">place baseorder</button></li>
+                <li><button id="safetyorderbttn">place safety order</button></li>
+                <li><button id="leverage10bttn">set leverage to 10</button></li>
+                <li><button id="closepositionbttn">close position</button></li>
+            </ul>
+        </div>-->
+        <!--end of debug panel-->
+        
+        <div class="botdiv">
+            
+            <div class=" rectangleBlack childoftotal">
+                <div class="PriceDisplayContainer">
+                    <div class="connectionStatusDiv">
+                        <canvas id="connectionCircle3" width="10" height="10" class="connectionMarkers"></canvas>
+                        <p id="connectionStatus3" class="connectionMarkers">Connection is unclear</p>
+                    </div>
+                    <p id="cardTitle">ByBit Elf 13</p>
+                    
+                    <div class = "platformSymbolData">
+                        
+                        <p class=""><span id="symbolDisplay3">symbol</span></p>
+                        <p class="PriceDisplayText">Last</p>
+                        <p id="lastPriceDisplay3" class="PriceDisplayTextSuper">no price requested yet</p>
+                        <p class="PriceDisplayText">24h change: <span id="dailyChange3"></span></p>
+                        <p class="PriceDisplayText">Ask: <span id="askPriceDisplay3"></span></p>
+                        <p class="PriceDisplayText">Bid: <span id="bidPriceDisplay3"></span></p>
+                    </div>
+                    <div class="elfGifDiv">
+                        <img src="elfJumpingClear.gif" width="240" height="155" frameBorder="0" class="childoftotal" alt="elf jumping gif" id="jumpingElfGif3"></img>
+                    </div>
+                </div>
+                
+            </div>
+
+        <!-- <div class="PriceDisplayContainer">
+                <p class="PriceDisplayTitle">CURRENT BTC PRICE</p>
+                <p id="askPriceDisplay">no price requested yet</p>
+                <p id="bidPriceDisplay">no price requested yet</p>
+                <p id="lastPriceDisplay">no price requested yet</p>
+            </div>-->
+            
+
+            
+
+            <!-- Orange Container -->
+            <!-- Overall Performance Container -->
+            <div class=" rectangleOrange childoftotal">
+                <div class="orangeContainerTop">
+                    <p id="cardTitle">Elf PERFORMANCE</p>
+                    <p class="subTitle">Today's Gainz</p>
+        
+                    <p id="UPLUSD3" class="PositionDisplayTextSuper">0.00000000</p>
+                    <p id="UPLpercentage3" class="PositionDisplayText">+0%</p>
+                    <p id="UPL3" class="PositionDisplayText">0.00000000</p>
+                    <p>. </p>
+                    <p class="subTitle">Total Gainz</p>
+                    <p id="TotalPLUSD3" class="PositionDisplayTextSuper">0.00000000</p>
+                    <p id="TotalPL3" class="PositionDisplayText">0.00000000</p>
+                    
+                </div>
+                <div><button class="subTitle nonButton" id="PerfTitle3">Performance</button><span id="PerfArrow3" class="PerfArrowDown"></span></div>
+                <div class="orangeContainerBottom flex-container" id="PerformanceStatsDiv3">
+                    <div class="flex-child" id="perfLeft">
+                        <ul id="avg-gains-left" class="ulstats">
+                            <li id="Return-7PL" class="statsli">Past 7 days PL:</li>
+                            <li id="Return-7avggain" class="statsli">Past 7 avg % ROC/day:</li>
+                            <li id="Return-30PL" class="statsli">Past 30 days PL:</li>
+                            <li id="Return-30avggain" class="statsli">Past 30 avg % ROC/day:</li>
+                            <li id="Return-30avggain" class="statsli">Annualized % ROC:</li>
+                        </ul>
+                        
+                    </div>
+                    <div class="flex-child" id="perfRight">
+                        <ul id="avg-gains-right">
+                            <li id="number-7PL3" class="statsli">???</li>
+                            <li id="number-7avggain3" class="statsli">???</li>
+                            <li id="number-30PL3" class="statsli">???</li>
+                            <li id="number-30avggain3" class="statsli">???</li>
+                            <li id="number-annualizedReturn3" class="statsli">???</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Current Position Container -->
+                <div><button class="subTitle nonButton" id="cpTitle3">Current Position</button><span id="cpArrow3" class="cpArrowDown"></span></div>
+                <div class="orangeContainerBottom flex-container">
+                    <div class="flex-child" id="cpLeft3">
+                        <ul id="current-position" class="ulstats">
+                            <li id="CP-quantity3" class="statsli">null</li>
+                            <li id="CP-leverage3" class="statsli">null</li>
+                            <li id="CP-isIsolated3" class="statsli">null</li>
+                            <li id="CP-value3" class="statsli">null</li>
+                        </ul>
+                        
+                    </div>
+                    <div class="flex-child" id="cpRight3">
+                        <ul id="current-position">
+                            <li id="CP-entryPrice3" class="statsli">null</li>
+                            <li id="CP-tradeType3" class="statsli">null</li>
+                            <li id="CP-lastOrderTime3" class="statsli">null</li>
+                            <li id="CP-margin3" class="statsli">null</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Balance Container -->
+                <div><button class="subTitle nonButton" id="acBalanceTitle3">Account Balance</button><span id="acBalanceArrow" class="acBalanceArrowDown"></span></div>
+                <div class="orangeContainerBottom flex-container">
+                    <div id ="acBalanceDiv3" class="flex-child">
+                        <ul id="current-position">
+                            <li id="BL-walletBalance3" class="statsli">null</li>
+                            <li id="BL-walletBalanceUSD3" class="statsli">null</li>
+                            <li id="BL-equity3" class="statsli">null</li>
+                            <li id="BL-available3" class="statsli">null</li>
+                            <li id="BL-usedMargin3" class="statsli">null</li>
+                            <li id="BL-orderMargin3" class="statsli">null</li>
+                        </ul>
+                    </div>
+                </div>
+                 <!-- Bot Settings Container -->
+                 <div><button class="subTitle nonButton" id="bsTitle3">Bot Settings</button><span id="bsArrow3" class="bsArrowUp"></span></div>
+                 <div class="orangeContainerBottom flex-container">
+                     <div id ="bsDiv3" class="flex-child HideThis">
+                            <form id="botSettingsform3">
+                                <ul>
+                                    <li><p>
+                                        Committed Capital <br><span style ='font-size:12px'>(% of total account balance)</span>
+                                        <input type="range" min="1" max="100" value="100" class="baseOrderPercent" id="BS-committedCapitalSlider3">
+                                        <span id="BS-committedCapitalNumber3">100</span>
+                                    </li>
+                                    <li>
+                                        <span>Base order size %</span>
+                                        <input type="range" min="1" max="100" value="50" class="baseOrderPercent" id="BS-baseOrderPercentSlider3">
+                                        <span id="BS-baseOrderNumber3">100</span>
+                                    </li>
+                                        <li><p>
+                                            Profit Target %
+                                        <input type ="number" name="profitTarget" id="BS-profitTarget3"></p></li>
+                                        <li><p>
+                                            Leverage
+                                            <input type ="number" name="leverage" id="BS-leverage3"></p></li>
+                                        <li><p>
+                                            Safety Target %
+                                            <input type ="number" name="safetyTarget" id="BS-safetyTarget3"></p></li>
+                                        <li><p>
+                                        <li>
+                                            <span>Safety order size % of CC</span>
+                                            <input type="range" min="1" max="100" value="10" class="safetyOrderPercent" id="BS-safetyOrderPercent3">
+                                            <span id="BS-safetyOrderNumber3">0</span>
+                                        </li>
+                                        <li>
+                                            <span>Maximum number of safety orders</span>
+                                            <span id="BS-maxSafetyOrderNumber3">0</span>
+                                        </li>
+                                        <li><p>
+                                            Liquidation Limit
+                                            <input type ="number" name="liquidationLimit" id="BS-LiquidationLimit3"></p>10000</li>
+                                        
+                                </ul>
+                                <div class="bttnHolder">
+                                    <input type="submit" Value="Update Bot Settings">
+                                </div>
+                            </form>
+                     </div>
+                 </div>
+            </div>
+            <!-- End of Orange Container -->
     </div>
-</div> 
-<!--end of footer-->
+    <!--create a new bot div-->
+    <div class="botdiv HideThis">
+        <div class="createabotdiv">
+            <img src="CreateABot.jpg" width="150" id="createABotImageBttn" alt="create a bot" class="createbotimg"></img>
+         </div>
+        <!--end of create a new bot div-->
+    </div>
+
+<!--end of BOT3 - BOT3 - BOT3 -->
+<!--end of BOT3 - BOT3 - BOT3 -->
+<!--end of BOT3 - BOT3 - BOT3 -->
+<!--end of BOT3 - BOT3 - BOT3 -->
+
+
+<!--end of total wrap div -->
+</div>
     <script type="module" src="app.js"></script>
     <script type="module" src="elfHandler.js"></script>
 </body>

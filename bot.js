@@ -9,6 +9,8 @@ const dataFile = ('./dataFile.json');
 module.exports = class Bot{
     constructor(pair, type, cc, bos, pt, lev, st, soscc){//}, SafetyOrderMultiplier){
 
+        console.log('Creating new Elf.....');
+
         //safety trigger if number are not decimals
         if(bos>1 || pt>1 || st>1 || soscc>1){
             throw error('one of the bots initial parameters is larger than 1');
